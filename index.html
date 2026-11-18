@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>منصة بصيرة التعليمية للذكاء الاصطناعي | Baseera AI Platform</title>
+  <meta name="description" content="منصة بصيرة التعليمية للذكاء الاصطناعي وتكنولوجيا التعليم - أول بيئة تعليمية شاملة وميسرة للمكفوفين وذوي الاحتياجات الخاصة بمعايير WCAG AAA و UDL.">
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Skip Navigation Link for Blind Screen Reader Users -->
+  <a href="#main-content" class="skip-link">انتقل مباشرة إلى المحتوى التعليمي الرئيسي (مفتاح Tab)</a>
+
+  <!-- Visual Reading Guide Ruler Overlay -->
+  <div id="reading-ruler" aria-hidden="true"></div>
+
+  <!-- Top Universal Accessibility Toolbar (WCAG AAA Controls) -->
+  <aside class="top-accessibility-bar" aria-label="شريط إمكانية الوصول والتخصيص الصوتي والبصري">
+    <!-- Visual Themes -->
+    <div class="access-group" role="group" aria-label="أوضاع العرض والتباين اللوني">
+      <span style="font-weight: 700; color: var(--text-muted);"><i class="fas fa-eye"></i> المظهر:</span>
+      <button id="btn-theme-light" class="access-btn theme-btn active" onclick="Accessibility.setTheme('light')" aria-label="تفعيل الوضع الفاتح">
+        <i class="fas fa-sun" aria-hidden="true"></i> فاتح
+      </button>
+      <button id="btn-theme-dark" class="access-btn theme-btn" onclick="Accessibility.setTheme('dark')" aria-label="تفعيل الوضع المظلم الليلي">
+        <i class="fas fa-moon" aria-hidden="true"></i> داكن
+      </button>
+      <button id="btn-theme-hc" class="access-btn theme-btn" onclick="Accessibility.setTheme('high-contrast')" aria-label="تفعيل وضع التباين العالي الفائق للمكفوفين وضعاف البصر معايير AAA">
+        <i class="fas fa-adjust" aria-hidden="true"></i> عالي التباين (AAA)
+      </button>
+    </div>
+
+    <!-- Font Resizer & Dyslexia -->
+    <div class="access-group" role="group" aria-label="التحكم بحجم ونوع الخط">
+      <span style="font-weight: 700; color: var(--text-muted);"><i class="fas fa-font"></i> الخط:</span>
+      <button class="access-btn" onclick="Accessibility.changeFontSize(10)" title="تكبير الخط" aria-label="تكبير حجم الخط بنسبة عشرة بالمائة">
+        <i class="fas fa-plus" aria-hidden="true"></i> تكبير
+      </button>
+      <button class="access-btn" onclick="Accessibility.changeFontSize(-10)" title="تصغير الخط" aria-label="تصغير حجم الخط بنسبة عشرة بالمائة">
+        <i class="fas fa-minus" aria-hidden="true"></i> تصغير
+      </button>
+      <button class="access-btn" onclick="Accessibility.resetFontSize()" title="إعادة ضبط حجم الخط 100%" aria-label="إعادة ضبط الخط للحجم الافتراضي">
+        100%
+      </button>
+      <button id="btn-dyslexia" class="access-btn" onclick="Accessibility.toggleDyslexiaFont()" title="خط ميسر لعسر القراءة وصعوبات التعلم" aria-label="تبديل الخط لخط ميسر لعسر القراءة">
+        <i class="fas fa-spell-check" aria-hidden="true"></i> خط ميسر
+      </button>
+    </div>
+
+    <!-- Reading Aids & Audio Controls -->
+    <div class="access-group" role="group" aria-label="المساعدات الصوتية ومسطرة القراءة">
+      <button id="btn-ruler" class="access-btn" onclick="Accessibility.toggleReadingRuler()" title="مسطرة القراءة البصرية (Alt + R)" aria-label="تشغيل أو إيقاف مسطرة القراءة البصرية">
+        <i class="fas fa-ruler-horizontal" aria-hidden="true"></i> مسطرة القراءة
+      </button>
+      <button id="global-mic-btn" class="access-btn" onclick="Accessibility.toggleVoiceRecognition()" title="الأوامر الصوتية التفاعلية (Alt + M)" aria-label="التحدث بالأوامر الصوتية">
+        <i class="fas fa-microphone" aria-hidden="true"></i> تحكم صوتي
+      </button>
+      <div class="tts-speed-selector" title="سرعة النطق الصوتي">
+        <i class="fas fa-headphones" aria-hidden="true"></i>
+        <select id="tts-speed-select" onchange="Accessibility.setSpeed(this.value)" aria-label="تحديد سرعة القراءة الصوتية">
+          <option value="1.0">سرعة 1x</option>
+          <option value="1.25">سرعة 1.25x</option>
+          <option value="1.5">سرعة 1.5x</option>
+          <option value="2.0">سرعة 2x</option>
+          <option value="2.5">سرعة 2.5x</option>
+        </select>
+      </div>
+      <button class="access-btn" onclick="App.openShortcutsModal()" title="دليل الاختصارات (Alt + H)" aria-label="عرض دليل اختصارات لوحة المفاتيح">
+        <i class="fas fa-keyboard" aria-hidden="true"></i> الاختصارات
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Navigation Header -->
+  <header class="main-header" role="banner">
+    <a href="#" class="brand-wrapper" onclick="App.navigate('home')" aria-label="منصة بصيرة التعليمية للذكاء الاصطناعي - العودة للرئيسية">
+      <div class="brand-logo-icon" aria-hidden="true">
+        <i class="fas fa-brain"></i>
+      </div>
+      <div class="brand-text">
+        <h1>منصة بصيرة التعليمية للذكاء الاصطناعي</h1>
+        <span>Baseera AI Inclusive Platform | بإشراف المهندس محمد عاطف</span>
+      </div>
+    </a>
+
+    <!-- Top Navigation Links (10 Modules) -->
+    <nav class="main-nav" role="navigation" aria-label="القائمة الرئيسية للمنصة">
+      <ul class="nav-links">
+        <li>
+          <button class="nav-link-btn active" data-target-section="home" aria-label="الصفحة الرئيسية (Alt + 1)">
+            <i class="fas fa-home" aria-hidden="true"></i> الرئيسية
+          </button>
+        </li>
+        <li>
+          <button class="nav-link-btn" data-target-section="about-ai" aria-label="فصول الذكاء الاصطناعي التسعة (Alt + 2)">
+            <i class="fas fa-graduation-cap" aria-hidden="true"></i> فصول الذكاء الاصطناعي
+          </button>
+        </li>
+        <li>
+          <button class="nav-link-btn" data-target-section="edtech" aria-label="تكنولوجيا التعليم والتحول الرقمي (Alt + 3)">
+            <i class="fas fa-laptop-code" aria-hidden="true"></i> تكنولوجيا التعليم
+          </button>
+        </li>
+        <li>
+          <button class="nav-link-btn" data-target-section="tools" aria-label="مكتبة أدوات الذكاء الاصطناعي (Alt + 4)">
+            <i class="fas fa-tools" aria-hidden="true"></i> مكتبة الأدوات
+          </button>
+        </li>
+        <li>
+          <button class="nav-link-btn" data-target-section="quizzes" aria-label="الاختبارات التفاعلية والتقييم (Alt + 5)">
+            <i class="fas fa-vial" aria-hidden="true"></i> الاختبارات
+          </button>
+        </li>
+        <li>
+          <button class="nav-link-btn" data-target-section="dashboard" aria-label="لوحة تحكم الطالب والشهادات المعتمدة (Alt + 6)">
+            <i class="fas fa-award" aria-hidden="true"></i> لوحة الطالب
+          </button>
+        </li>
+        <li>
+          <button class="nav-link-btn" data-target-section="discussions" aria-label="غرف النقاش والمجتمع (Alt + 7)">
+            <i class="fas fa-comments" aria-hidden="true"></i> غرف النقاش
+          </button>
+        </li>
+        <li>
+          <button class="nav-link-btn" data-target-section="accessibility-center" aria-label="مركز إمكانية الوصول والأدوات المتخصصة (Alt + 8)">
+            <i class="fas fa-universal-access" aria-hidden="true"></i> مركز الوصول
+          </button>
+        </li>
+        <li id="nav-item-admin" style="display: none;">
+          <button class="nav-link-btn" data-target-section="admin" aria-label="لوحة إدارة المشرف العام المهندس محمد عاطف (Alt + 9)">
+            <i class="fas fa-user-shield" aria-hidden="true"></i> إدارة المنصة
+          </button>
+        </li>
+        <li>
+          <button class="nav-link-btn" data-target-section="contact" aria-label="صفحة اتصل بنا والدعم الفني للمهندس محمد عاطف (Alt + 0)">
+            <i class="fas fa-phone-alt" aria-hidden="true"></i> اتصل بنا
+          </button>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Auth Bar in Header -->
+    <div id="header-auth-container" class="auth-bar" role="region" aria-label="حالة الحساب وتسجيل الدخول">
+      <!-- Populated dynamically by Auth.updateHeaderProfile() -->
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main id="main-content" class="main-container" role="main">
+
+    <!-- ===================================================================== -->
+    <!-- MODULE 1: HOME PAGE -->
+    <!-- ===================================================================== -->
+    <section id="section-home" class="platform-section active" aria-labelledby="home-heading">
+      <div class="hero-banner">
+        <h2 id="home-heading" class="hero-title">
+          بصيرة: بوابتكم الذكية نحو عالم الذكاء الاصطناعي وتكنولوجيا التعليم الشامل
+        </h2>
+        <p class="hero-desc">
+          المنصة التعليمية الأولى المصممة خصيصاً لتمكين الطلاب المكفوفين وضعاف البصر وذوي الاحتياجات الخاصة، ومتاحة لجميع المراحل التعليمية وفق مبادئ التصميم الشامل للتعلم (UDL) وأعلى معايير الوصول الرقمي العالمية WCAG AAA.
+        </p>
+        <div class="hero-actions">
+          <button class="btn-primary" onclick="App.navigate('about-ai')" aria-label="ابدأ رحلة التعلم في الفصول التسعة">
+            <i class="fas fa-rocket" aria-hidden="true"></i> ابدأ دراسة الفصول التسعة
+          </button>
+          <button class="btn-secondary" onclick="App.navigate('quizzes')" aria-label="الانتقال للاختبارات التفاعلية">
+            <i class="fas fa-clipboard-check" aria-hidden="true"></i> خوض الاختبارات والتقييم
+          </button>
+          <button class="access-btn" onclick="Accessibility.speak(document.querySelector('.hero-banner').innerText)" aria-label="الاستماع الصوتي لترحيب المنصة">
+            <i class="fas fa-volume-up" aria-hidden="true"></i> استمع للمقدمة
+          </button>
+        </div>
+      </div>
+
+      <!-- Realtime Platform Impact Statistics -->
+      <div class="stats-strip" role="region" aria-label="إحصائيات المنصة الحية">
+        <div class="stat-card" tabindex="0">
+          <div class="stat-icon"><i class="fas fa-users"></i></div>
+          <div class="stat-info">
+            <h3 id="stat-students-count">1,540+</h3>
+            <p>طالب وطالبة من أصحاب الهمم</p>
+          </div>
+        </div>
+
+        <div class="stat-card" tabindex="0">
+          <div class="stat-icon"><i class="fas fa-clock"></i></div>
+          <div class="stat-info">
+            <h3 id="stat-hours-count">6,250+</h3>
+            <p>ساعة تدريبية ميسرة</p>
+          </div>
+        </div>
+
+        <div class="stat-card" tabindex="0">
+          <div class="stat-icon"><i class="fas fa-certificate"></i></div>
+          <div class="stat-info">
+            <h3 id="stat-certs-count">920+</h3>
+            <p>شهادة معتمدة موثقة برمز QR</p>
+          </div>
+        </div>
+
+        <div class="stat-card" tabindex="0">
+          <div class="stat-icon"><i class="fas fa-layer-group"></i></div>
+          <div class="stat-info">
+            <h3 id="stat-chapters-count">9</h3>
+            <p>وحدات تعليمية شاملة</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Key Accessibility Pillars -->
+      <div class="section-header">
+        <div>
+          <h2><i class="fas fa-star" style="color: #eab308;"></i> ركائز الوصول الشامل في منصة بصيرة</h2>
+          <p>كيف تضمن منصة بصيرة تجربة تعليمية ميسرة وعادلة للجميع دون أي عوائق تقنية</p>
+        </div>
+      </div>
+
+      <div class="cards-grid">
+        <div class="chapter-card" tabindex="0">
+          <div class="chapter-header">
+            <div class="stat-icon"><i class="fas fa-headphones-alt"></i></div>
+            <h3 class="chapter-title">شرح صوتي متكامل وسرعات متعددة</h3>
+          </div>
+          <p class="chapter-desc">
+            قراءة صوتية آلية لجميع فصول المنهج والأدوات والاختبارات، مع إمكانية تسريع أو تبطيء الصوت بين 1x و 2.5x لتناسب سرعة استيعاب كل طالب.
+          </p>
+        </div>
+
+        <div class="chapter-card" tabindex="0">
+          <div class="chapter-header">
+            <div class="stat-icon"><i class="fas fa-braille"></i></div>
+            <h3 class="chapter-title">دعم برايل والتصدير الإلكتروني</h3>
+          </div>
+          <p class="chapter-desc">
+            تصدير ملخصات الدروس مباشرة بصيغتي TXT و BRL المتوافقة مع أجهزة الأسطر الإلكترونية المتجددة للمكفوفين (Refreshable Braille Displays).
+          </p>
+        </div>
+
+        <div class="chapter-card" tabindex="0">
+          <div class="chapter-header">
+            <div class="stat-icon"><i class="fas fa-magic"></i></div>
+            <h3 class="chapter-title">الوضع المبسط للمكفوفين (Simple Mode)</h3>
+          </div>
+          <p class="chapter-desc">
+            زر مخصص في كل درس لتحويل المصطلحات الرياضية والبرمجية المعقدة إلى تشبيهات حسية وصوتية ولمسية مستوحاة من البيئة اليومية.
+          </p>
+        </div>
+
+        <div class="chapter-card" tabindex="0">
+          <div class="chapter-header">
+            <div class="stat-icon"><i class="fas fa-award"></i></div>
+            <h3 class="chapter-title">شهادات معتمدة موثقة برمز QR</h3>
+          </div>
+          <p class="chapter-desc">
+            إصدار فوري لشهادات إتمام المنهج تتضمن الاسم المعتمد والرقم القومي ورمز استجابة سريعة QR قابل للتحقق والطباعة عالية الدقة.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- MODULE 2: ABOUT AI (9 CHAPTERS) -->
+    <!-- ===================================================================== -->
+    <section id="section-about-ai" class="platform-section" aria-labelledby="about-ai-heading">
+      <div class="section-header">
+        <div>
+          <h2 id="about-ai-heading"><i class="fas fa-book-open" style="color: var(--primary);"></i> فصول منهج الذكاء الاصطناعي (9 وحدات متكاملة)</h2>
+          <p>تدرج معرفي متكامل من المفاهيم التأسيسية حتى أخلاقيات ومستقبل الذكاء الاصطناعي، مدعماً بالصوت والشرح المبسط وبرايل</p>
+        </div>
+      </div>
+
+      <div id="courses-grid-container" class="cards-grid">
+        <!-- Rendered dynamically by App.renderCoursesGrid() -->
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- MODULE 3: EDUCATIONAL TECHNOLOGY (EDTECH) -->
+    <!-- ===================================================================== -->
+    <section id="section-edtech" class="platform-section" aria-labelledby="edtech-heading">
+      <div class="section-header">
+        <div>
+          <h2 id="edtech-heading"><i class="fas fa-laptop-code" style="color: var(--accent);"></i> تكنولوجيا التعليم والتحول الرقمي الميسر</h2>
+          <p>استكشف آفاق التعلم الذكي والتكنولوجيا المساعدة في المنظومات التعليمية الحديثة</p>
+        </div>
+      </div>
+
+      <div class="cards-grid">
+        <div class="chapter-card" tabindex="0">
+          <div class="chapter-header">
+            <div class="stat-icon"><i class="fas fa-lightbulb"></i></div>
+            <h3 class="chapter-title">1. التعلم الذكي (Smart Learning)</h3>
+          </div>
+          <p class="chapter-desc">
+            بيئات تفاعلية تعتمد على خوارزميات التكيف الذاتي لتخصيص مسار التعلم وتقديم المحتوى بالسرعة والشكل الذي يفضله الطالب، سواءً كان نصياً، صوتياً، أو تفاعلياً.
+          </p>
+          <div style="background: var(--bg-surface-elevated); padding: 0.75rem; border-radius: 8px; margin-top: 0.5rem; font-size: 0.9rem;">
+            <strong>المزايا الرئيسية:</strong> التعلم بالوتيرة الشخصية، التغذية الراجعة التكيفية، والتقييم المستمر.
+          </div>
+        </div>
+
+        <div class="chapter-card" tabindex="0">
+          <div class="chapter-header">
+            <div class="stat-icon"><i class="fas fa-digital-tachograph"></i></div>
+            <h3 class="chapter-title">2. التحول الرقمي التعليمي (Digital Transformation)</h3>
+          </div>
+          <p class="chapter-desc">
+            إعادة صياغة التجربة التعليمية بالكامل عبر رقمنة المناهج وتوفير بنية سحابية متكاملة تضمن وصول الطالب للمواد والدروس من أي جهاز وفي أي وقت بأمان وموثوقية.
+          </p>
+          <div style="background: var(--bg-surface-elevated); padding: 0.75rem; border-radius: 8px; margin-top: 0.5rem; font-size: 0.9rem;">
+            <strong>المزايا الرئيسية:</strong> إلغاء العوائق الجغرافية، المكتبات الرقمية الميسرة، والتعاون السحابي.
+          </div>
+        </div>
+
+        <div class="chapter-card" tabindex="0">
+          <div class="chapter-header">
+            <div class="stat-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+            <h3 class="chapter-title">3. منصات التعلم الإلكتروني (LMS)</h3>
+          </div>
+          <p class="chapter-desc">
+            أنظمة إدارة التعلم الحديثة التي تدعم التصميم الشامل للتعلم (UDL) وتقدم تجربة متطابقة عبر الهواتف الذكية والحواسيب مع تكامل كامل مع قارئات الشاشة مثل NVDA و TalkBack.
+          </p>
+          <div style="background: var(--bg-surface-elevated); padding: 0.75rem; border-radius: 8px; margin-top: 0.5rem; font-size: 0.9rem;">
+            <strong>المزايا الرئيسية:</strong> التتبع الآلي للتقدم، الاختبارات الذاتية، وإصدار الشهادات الرقمية.
+          </div>
+        </div>
+
+        <div class="chapter-card" tabindex="0">
+          <div class="chapter-header">
+            <div class="stat-icon"><i class="fas fa-universal-access"></i></div>
+            <h3 class="chapter-title">4. التكنولوجيا المساعدة لذوي الاحتياجات (Assistive Tech)</h3>
+          </div>
+          <p class="chapter-desc">
+            الأجهزة والبرمجيات المتطورة التي تكسر الحواجز البصرية والحركية: شاشات برايل الإلكترونية، المحولات الصوتية الذكية، والمكبرات الرقمية التفاعلية مع دعم الأوامر الصوتية.
+          </p>
+          <div style="background: var(--bg-surface-elevated); padding: 0.75rem; border-radius: 8px; margin-top: 0.5rem; font-size: 0.9rem;">
+            <strong>المزايا الرئيسية:</strong> الاستقلالية التامة في الدراسة، الشمول الأكاديمي، وتكافؤ الفرص.
+          </div>
+        </div>
+
+        <div class="chapter-card" tabindex="0">
+          <div class="chapter-header">
+            <div class="stat-icon"><i class="fas fa-gamepad"></i></div>
+            <h3 class="chapter-title">5. التطبيقات والتحفيز الذكي (Educational Apps)</h3>
+          </div>
+          <p class="chapter-desc">
+            توظيف التلعيب ونظام النقاط والشارات (Gamification) لتحفيز الطلاب على التعلم المستمر والشعور بالإنجاز عند إتمام كل فصل دراسي أو اختبار تقييمي.
+          </p>
+          <div style="background: var(--bg-surface-elevated); padding: 0.75rem; border-radius: 8px; margin-top: 0.5rem; font-size: 0.9rem;">
+            <strong>المزايا الرئيسية:</strong> مكافآت XP، لوحات متصدرين مشجعة، وشهادات معتمدة.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- MODULE 4: AI TOOLS DIRECTORY (10 TOOLS) -->
+    <!-- ===================================================================== -->
+    <section id="section-tools" class="platform-section" aria-labelledby="tools-heading">
+      <div class="section-header">
+        <div>
+          <h2 id="tools-heading"><i class="fas fa-tools" style="color: var(--primary);"></i> مكتبة أدوات الذكاء الاصطناعي للطلاب والباحثين</h2>
+          <p>دليل مفصل لأفضل 10 أدوات عالمية مع توضيحات إمكانية الوصول لقارئات الشاشة وروابط الوصول المباشر</p>
+        </div>
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+          <input type="text" id="tools-search-input" class="form-control" placeholder="ابحث عن أداة (مثال: Gemini, Canva)..." oninput="App.renderToolsGrid('all', this.value)" style="width: 260px;" aria-label="البحث في مكتبة الأدوات">
+        </div>
+      </div>
+
+      <div id="tools-grid-container" class="cards-grid">
+        <!-- Rendered dynamically by App.renderToolsGrid() -->
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- MODULE 5: INTERACTIVE QUIZZES & MOTIVATIONAL SYSTEM -->
+    <!-- ===================================================================== -->
+    <section id="section-quizzes" class="platform-section" aria-labelledby="quizzes-heading">
+      <div class="section-header">
+        <div>
+          <h2 id="quizzes-heading"><i class="fas fa-vial" style="color: var(--primary);"></i> الاختبارات التفاعلية والتقييم الذكي</h2>
+          <p>اختر الفصل المطلوب واختبر معلوماتك فورياً مع رسائل تحفيزية دقيقة وتصحيح تفصيلي لكل إجابة</p>
+        </div>
+      </div>
+
+      <!-- Chapter selector pills -->
+      <div id="quizzes-selector-container" class="stats-strip" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); margin-bottom: 2rem;">
+        <!-- Loaded dynamically -->
+      </div>
+
+      <!-- Active Quiz Box -->
+      <div class="quiz-box">
+        <h3 id="active-quiz-title" style="font-size: 1.4rem; font-weight: 800; margin-bottom: 1.5rem; color: var(--primary);">
+          يرجى اختيار اختبار من القائمة أعلاه للبدء
+        </h3>
+
+        <!-- Motivational Score Feedback Box (Initially Hidden) -->
+        <div id="active-quiz-results" style="display: none;"></div>
+
+        <!-- Quiz Questions Form -->
+        <div id="active-quiz-questions"></div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- MODULE 6: STUDENT DASHBOARD & VERIFIED CERTIFICATES -->
+    <!-- ===================================================================== -->
+    <section id="section-dashboard" class="platform-section" aria-labelledby="dashboard-heading">
+      <div class="section-header">
+        <div>
+          <h2 id="dashboard-heading"><i class="fas fa-id-card" style="color: var(--primary);"></i> لوحة تحكم الطالب وإصدار الشهادة الرسمية</h2>
+          <p>متابعة تقدمك المعرفي، رصيد نقاط الخبرة XP، الشارات المكتسبة، وتحميل شهادتك المعتمدة</p>
+        </div>
+      </div>
+
+      <div class="stats-strip">
+        <div class="stat-card" tabindex="0">
+          <div class="stat-icon"><i class="fas fa-user-graduate"></i></div>
+          <div class="stat-info">
+            <h3 id="dash-student-name">طالب مسجل</h3>
+            <p id="dash-student-nid">الرقم القومي: قيد التوثيق</p>
+          </div>
+        </div>
+
+        <div class="stat-card" tabindex="0">
+          <div class="stat-icon"><i class="fas fa-star" style="color: #eab308;"></i></div>
+          <div class="stat-info">
+            <h3 id="dash-student-xp">100 XP</h3>
+            <p>إجمالي نقاط الخبرة المكتسبة</p>
+          </div>
+        </div>
+
+        <div class="stat-card" tabindex="0" style="grid-column: span 2;">
+          <div class="stat-info" style="width: 100%;">
+            <div id="dash-lessons-progress"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Earned Badges -->
+      <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.25rem; margin-bottom: 2rem;">
+        <h4 style="font-weight: 800; margin-bottom: 0.75rem; color: var(--text-primary);"><i class="fas fa-medal" style="color: #eab308;"></i> الشارات والأوسمة الشرفية:</h4>
+        <div id="dash-badges-container" style="display: flex; gap: 0.5rem; flex-wrap: wrap;"></div>
+      </div>
+
+      <!-- Official Verified Certificate Preview & Print -->
+      <div class="section-header" style="margin-top: 2rem;">
+        <div>
+          <h3><i class="fas fa-stamp" style="color: var(--primary);"></i> الشهادة الرسمية المعتمدة</h3>
+          <p>يمكنك طباعة الشهادة أو حفظها بصيغة PDF عالية الجودة</p>
+        </div>
+        <button class="btn-primary" onclick="App.printCertificate()" aria-label="طباعة الشهادة الرسمية أو حفظها PDF">
+          <i class="fas fa-print" aria-hidden="true"></i> طباعة / تحميل الشهادة الرسمية
+        </button>
+      </div>
+
+      <div class="certificate-container" id="official-certificate-view" tabindex="0" aria-label="الشهادة الرسمية الصادرة من منصة بصيرة">
+        <div class="cert-header">
+          <h2>شهادة إتمام معتمدة</h2>
+          <p>منصة بصيرة التعليمية للذكاء الاصطناعي وتكنولوجيا التعليم الشامل</p>
+          <small style="color: var(--text-muted);">تحت رعاية وإشراف: المهندس محمد عاطف</small>
+        </div>
+
+        <div class="cert-body">
+          <p>تشهد إدارة منصة <strong>بصيرة</strong> بأن الطالب / الطالبة:</p>
+          <span class="cert-student-name" id="cert-student-fullname">اسم الطالب بالكامل</span>
+          <p id="cert-student-nid" style="font-weight: bold; color: #475569;">الرقم القومي: 29800000000000</p>
+          <p>
+            قد اجتاز بنجاح وتميز متطلبات البرنامج التعليمي المتكامل في:
+            <br>
+            <strong style="color: #1e3a8a; font-size: 1.35rem;">"أساسيات وتطبيقات الذكاء الاصطناعي وتكنولوجيا التعليم الميسر"</strong>
+            <br>
+            بمعدل إنجاز متميز، وحصل على شارات التفوق والامتياز التقني.
+          </p>
+        </div>
+
+        <div class="cert-footer">
+          <div>
+            <p><strong>تاريخ الإصدار:</strong> <span id="cert-issue-date">18 نوفمبر 2026</span></p>
+            <p><strong>كود التوثيق الإلكتروني:</strong> BAS-AI-2026-CERT</p>
+            <p style="margin-top: 0.5rem;"><strong>المشرف العام ومؤسس المنصة:</strong></p>
+            <p style="font-size: 1.25rem; font-weight: 900; color: #1e3a8a;">المهندس محمد عاطف</p>
+          </div>
+
+          <div style="text-align: center;">
+            <div class="cert-qr" aria-label="رمز التحقق الإلكتروني الرسمي QR Code">
+              QR CODE<br>موثق إلكترونياً
+            </div>
+            <span style="font-size: 0.75rem; color: #64748b; margin-top: 0.25rem; display: block;">تحقق فوري</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- MODULE 7: DISCUSSIONS (COMMUNITY & INSTRUCTOR ROOM) -->
+    <!-- ===================================================================== -->
+    <section id="section-discussions" class="platform-section" aria-labelledby="discussions-heading">
+      <div class="section-header">
+        <div>
+          <h2 id="discussions-heading"><i class="fas fa-comments" style="color: var(--primary);"></i> غرف النقاش ومجتمع بصيرة التفاعلي</h2>
+          <p>تواصل مع زملائك الطلاب، واطرح تساؤلاتك مباشرة على المشرف العام المهندس محمد عاطف</p>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 2rem;">
+        <!-- Public Community Discussions -->
+        <div>
+          <h3 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 1rem; color: var(--primary);">
+            <i class="fas fa-globe"></i> غرفة النقاش العامة المفتوحة
+          </h3>
+
+          <form onsubmit="App.submitPublicDiscussion(event)" style="margin-bottom: 1.5rem;">
+            <div class="form-group">
+              <label for="public-message-input" class="form-label">شارك استفساراً أو فكرة مع جميع الطلاب:</label>
+              <textarea id="public-message-input" class="form-control" rows="3" placeholder="اكتب سؤالك هنا بوضوح..." required></textarea>
+            </div>
+            <button type="submit" class="btn-primary">
+              <i class="fas fa-paper-plane" aria-hidden="true"></i> نشر المشاركة العامة
+            </button>
+          </form>
+
+          <div id="public-threads-container" class="discussion-threads">
+            <!-- Loaded dynamically -->
+          </div>
+        </div>
+
+        <!-- Private Instructor Room with المهندس محمد عاطف -->
+        <div>
+          <h3 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 1rem; color: var(--accent);">
+            <i class="fas fa-user-tie"></i> غرفة الاستشارات الخاصة مع المشرف العام
+          </h3>
+
+          <div class="supervisor-notice-banner" style="margin-bottom: 1rem;">
+            <i class="fas fa-info-circle" style="font-size: 1.3rem; color: var(--primary);"></i>
+            <p style="font-size: 0.95rem; font-weight: 700;">
+              هذه الغرفة مخصصة للتواصل المباشر والخاص بينك وبين المهندس محمد عاطف، ولن تظهر رسائلك لبقية الطلاب حفاظاً على خصوصيتك.
+            </p>
+          </div>
+
+          <form onsubmit="App.submitPrivateMessage(event)" style="margin-bottom: 1.5rem;">
+            <div class="form-group">
+              <label for="private-message-input" class="form-label">رسالتك الموجهة للمهندس محمد عاطف:</label>
+              <textarea id="private-message-input" class="form-control" rows="3" placeholder="اطرح استفسارك الأكاديمي أو طلب الدعم الفني الخاص هنا..." required></textarea>
+            </div>
+            <button type="submit" class="btn-primary" style="background: var(--accent); border-color: var(--accent);">
+              <i class="fas fa-lock" aria-hidden="true"></i> إرسال رسالة خاصة للمشرف
+            </button>
+          </form>
+
+          <div id="private-messages-container" class="discussion-threads">
+            <!-- Loaded dynamically -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- MODULE 8: ACCESSIBILITY CENTER & SPECIALIZED AI TOOLS -->
+    <!-- ===================================================================== -->
+    <section id="section-accessibility-center" class="platform-section" aria-labelledby="access-center-heading">
+      <div class="section-header">
+        <div>
+          <h2 id="access-center-heading"><i class="fas fa-universal-access" style="color: var(--primary);"></i> مركز إمكانية الوصول والأدوات الذكية المتخصصة</h2>
+          <p>استوديو تحويل النصوص لأصوات، المساعد الذكي لوصف الصور والمخططات صوتياً، ومختبر هندسة الأوامر</p>
+        </div>
+      </div>
+
+      <div class="cards-grid">
+        <!-- Tool 1: TTS / STT Studio -->
+        <div class="chapter-card" style="grid-column: span 1;">
+          <h3 class="chapter-title"><i class="fas fa-headphones" style="color: var(--primary);"></i> استوديو تحويل النص إلى صوت (TTS Studio)</h3>
+          <p class="chapter-desc">جرب كتابة أي نص أو فقرة دراسية لتستمع إليها بصوت عربي طبيعي واضح.</p>
+          <div class="form-group">
+            <textarea id="tts-studio-input" class="form-control" rows="4" placeholder="اكتب هنا أي نص باللغة العربية للاستماع لنطقه الصوتي الفوري...">مرحباً بك في منصة بصيرة للذكاء الاصطناعي وتكنولوجيا التعليم، صممت هذه البيئة لتمنحك تجربة تعليمية ميسرة وشاملة.</textarea>
+          </div>
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <button class="btn-primary" onclick="App.runTTSStudio()" aria-label="قراءة النص المكتوب بصوت عالٍ">
+              <i class="fas fa-play"></i> قراءة النص صوتياً
+            </button>
+            <button class="access-btn" onclick="Accessibility.stopSpeech()" aria-label="إيقاف الصوت">
+              <i class="fas fa-stop"></i> إيقاف الصوت
+            </button>
+          </div>
+        </div>
+
+        <!-- Tool 2: AI Chart & Image Describer -->
+        <div class="chapter-card" style="grid-column: span 1;">
+          <h3 class="chapter-title"><i class="fas fa-eye" style="color: var(--accent);"></i> مساعد وصف المخططات والرسوم البيانية للمكفوفين</h3>
+          <p class="chapter-desc">توليد شروح دلالية وصوتية تفصيلية للمخططات العلمية وفق معايير WCAG AAA.</p>
+          <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap;">
+            <button class="access-btn" onclick="App.runImageDescriber('neural_network')" aria-label="تحليل مخطط الشبكة العصبية">
+              <i class="fas fa-project-diagram"></i> مخطط شبكة عصبية عميقة
+            </button>
+            <button class="access-btn" onclick="App.runImageDescriber('ai_subfields')" aria-label="تحليل مخطط فروع الذكاء الاصطناعي">
+              <i class="fas fa-sitemap"></i> مخطط فروع الذكاء الاصطناعي
+            </button>
+          </div>
+          <div id="image-describer-output" aria-live="polite">
+            <p style="color: var(--text-muted); font-size: 0.95rem;">اختر مخططاً أعلاه للاستماع إلى تحليله الدلالي الصوتي.</p>
+          </div>
+        </div>
+
+        <!-- Tool 3: Interactive Prompt Engineering Lab -->
+        <div class="chapter-card" style="grid-column: 1 / -1;">
+          <h3 class="chapter-title"><i class="fas fa-magic" style="color: #9333ea;"></i> مختبر هندسة الأوامر الذكية (Prompt Lab)</h3>
+          <p class="chapter-desc">اكتب أمراً (برومبت) وسيقوم المساعد الذكي بتقييمه من 10 وإعطائك نصائح هندسية لتحسين دقته.</p>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+            <div class="form-group">
+              <label for="prompt-lab-goal" class="form-label">الهدف الأكاديمي المطلوب:</label>
+              <input type="text" id="prompt-lab-goal" class="form-control" placeholder="مثال: تلخيص درس التعلم العميق لذوي الإعاقة البصرية" value="تلخيص مفاهيم الذكاء الاصطناعي لذوي الاحتياجات">
+            </div>
+            <div class="form-group">
+              <label for="prompt-lab-input" class="form-label">نص البرومبت الذي كتبته:</label>
+              <input type="text" id="prompt-lab-input" class="form-control" placeholder="مثال: بصفتك معلماً، اشرح لي الشبكات العصبية في ثلاث نقاط بسيطة..." value="اشرح لي كيف يتعلم الحاسوب مثل الدماغ البشري في نقاط ميسرة صوتياً">
+            </div>
+          </div>
+          <button class="btn-primary" onclick="App.runPromptLab()" aria-label="تحليل وتقييم جودة البرومبت">
+            <i class="fas fa-vial"></i> تقييم البرومبت والحصول على النسخة المحسنة
+          </button>
+          <div id="prompt-lab-output" style="margin-top: 1.5rem;" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- MODULE 9: ADMIN PANEL (المهندس محمد عاطف) -->
+    <!-- ===================================================================== -->
+    <section id="section-admin" class="platform-section" aria-labelledby="admin-heading">
+      <div class="section-header">
+        <div>
+          <h2 id="admin-heading"><i class="fas fa-user-shield" style="color: var(--primary);"></i> لوحة إدارة المنصة (المهندس محمد عاطف)</h2>
+          <p>إدارة الفصول الدراسية، متابعة سجلات الطلاب ونقاطهم، ومراجعة رسائل التواصل الواردة</p>
+        </div>
+      </div>
+
+      <div class="stats-strip">
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-user-check"></i></div>
+          <div class="stat-info">
+            <h3>صلاحيات كاملة</h3>
+            <p>المشرف العام: المهندس محمد عاطف</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-database"></i></div>
+          <div class="stat-info">
+            <h3>قاعدة البيانات</h3>
+            <p>سحابية / محلية متزامنة</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Students Roster Table -->
+      <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; overflow-x: auto;">
+        <h3 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 1rem; color: var(--primary);">
+          <i class="fas fa-users-cog"></i> سجل الطلاب المسجلين بالمنصة
+        </h3>
+        <table style="width: 100%; border-collapse: collapse; text-align: right;">
+          <thead>
+            <tr style="background: var(--bg-surface-elevated); border-bottom: 2px solid var(--border-color);">
+              <th style="padding: 0.75rem;">#</th>
+              <th style="padding: 0.75rem;">الاسم بالكامل</th>
+              <th style="padding: 0.75rem;">البريد الإلكتروني</th>
+              <th style="padding: 0.75rem;">الرقم القومي</th>
+              <th style="padding: 0.75rem;">نقاط XP</th>
+              <th style="padding: 0.75rem;">التقدم</th>
+            </tr>
+          </thead>
+          <tbody id="admin-students-table-body">
+            <!-- Populated dynamically -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Contact Messages Inbox -->
+      <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem;">
+        <h3 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 1rem; color: var(--accent);">
+          <i class="fas fa-inbox"></i> صندوق رسائل اتصل بنا الواردة
+        </h3>
+        <div id="admin-messages-container" class="discussion-threads">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- MODULE 10: CONTACT & SUPERVISOR INFO -->
+    <!-- ===================================================================== -->
+    <section id="section-contact" class="platform-section" aria-labelledby="contact-heading">
+      <div class="section-header">
+        <div>
+          <h2 id="contact-heading"><i class="fas fa-phone-alt" style="color: var(--primary);"></i> اتصل بنا والدعم الفني المباشر</h2>
+          <p>نحن هنا لمساعدتكم وتقديم الدعم الفني الكامل لضمان تجربة تعليمية ميسرة وخالية من العوائق</p>
+        </div>
+      </div>
+
+      <!-- Supervisor Critical Notice Banner -->
+      <div class="supervisor-notice-banner" role="alert" tabindex="0">
+        <i class="fas fa-exclamation-circle" style="font-size: 2rem; color: var(--primary);"></i>
+        <div>
+          <h3 style="font-size: 1.25rem; font-weight: 900; margin-bottom: 0.35rem;">
+            تنبيه هام وتواصل مباشر مع المشرف العام:
+          </h3>
+          <p style="font-size: 1.15rem; font-weight: 800; line-height: 1.6;">
+            "في حالة وجود أي عطل أو استفسار يرجى التواصل مباشرة مع المهندس محمد عاطف."
+          </p>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;">
+        <!-- Contact Information Cards -->
+        <div>
+          <div class="chapter-card" style="margin-bottom: 1.25rem;" tabindex="0">
+            <h3 class="chapter-title"><i class="fas fa-user-shield" style="color: var(--primary);"></i> المشرف العام ومؤسس المنصة</h3>
+            <p style="font-size: 1.25rem; font-weight: 900; color: var(--primary); margin-bottom: 0.5rem;">المهندس محمد عاطف</p>
+            <p class="chapter-desc">المسؤول عن الإشراف الأكاديمي، تطوير المناهج الرقمية الميسرة، وإدارة منصة بصيرة التعليمية.</p>
+          </div>
+
+          <div class="chapter-card" style="margin-bottom: 1.25rem;" tabindex="0">
+            <h3 class="chapter-title"><i class="fas fa-envelope" style="color: var(--accent);"></i> البريد الإلكتروني الرسمي</h3>
+            <p style="font-size: 1.15rem; font-weight: 800; direction: ltr; text-align: right;">
+              <a href="mailto:matf37920@gmail.com" style="color: var(--primary); text-decoration: none;">matf37920@gmail.com</a>
+            </p>
+            <p class="chapter-desc">للشكاوى، المقترحات الأكاديمية، وطلبات اعتماد الشهادات الرسمية.</p>
+          </div>
+
+          <div class="chapter-card" tabindex="0">
+            <h3 class="chapter-title"><i class="fas fa-phone-square-alt" style="color: var(--success);"></i> الهاتف والواتساب للدعم الفوري</h3>
+            <p style="font-size: 1.35rem; font-weight: 900; direction: ltr; text-align: right;">
+              <a href="tel:01142837070" style="color: var(--success); text-decoration: none;">01142837070</a>
+            </p>
+            <p class="chapter-desc">خط الدعم الفني السريع للطلاب وأولياء الأمور طوال أيام الأسبوع.</p>
+          </div>
+        </div>
+
+        <!-- Accessible Contact Form -->
+        <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 14px; padding: 1.75rem; box-shadow: var(--card-shadow);">
+          <h3 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 1.25rem; color: var(--primary);">
+            <i class="fas fa-paper-plane"></i> نموذج المراسلة المباشرة
+          </h3>
+
+          <div id="contact-alert" class="simple-mode-box" style="display: none; margin-bottom: 1rem;"></div>
+
+          <form onsubmit="App.handleContactSubmit(event)">
+            <div class="form-group">
+              <label for="contact-name" class="form-label">الاسم بالكامل: *</label>
+              <input type="text" id="contact-name" class="form-control" placeholder="اكتب اسمك الثلاثي..." required>
+            </div>
+
+            <div class="form-group">
+              <label for="contact-email" class="form-label">البريد الإلكتروني: *</label>
+              <input type="email" id="contact-email" class="form-control" placeholder="name@gmail.com" required>
+            </div>
+
+            <div class="form-group">
+              <label for="contact-phone" class="form-label">رقم الهاتف (اختياري):</label>
+              <input type="tel" id="contact-phone" class="form-control" placeholder="01xxxxxxxxx">
+            </div>
+
+            <div class="form-group">
+              <label for="contact-subject" class="form-label">موضوع الرسالة:</label>
+              <input type="text" id="contact-subject" class="form-control" placeholder="استفسار، عطل فني، طلب شهادة...">
+            </div>
+
+            <div class="form-group">
+              <label for="contact-message" class="form-label">نص الرسالة أو الاستفسار: *</label>
+              <textarea id="contact-message" class="form-control" rows="4" placeholder="اكتب تفاصيل استفسارك هنا..." required></textarea>
+            </div>
+
+            <button type="submit" class="btn-primary" style="width: 100%; padding: 0.85rem; font-size: 1.05rem;">
+              <i class="fas fa-paper-plane" aria-hidden="true"></i> إرسال الرسالة إلى المهندس محمد عاطف
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ======================================================================= -->
+  <!-- MODALS -->
+  <!-- ======================================================================= -->
+
+  <!-- 1. Student Entry Gateway Modal (Accessible Login) -->
+  <div id="student-gateway-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-student-title">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="modal-student-title" style="font-size: 1.4rem; font-weight: 800; color: var(--primary);">
+          <i class="fas fa-sign-in-alt"></i> بوابة دخول الطلاب الميسرة
+        </h3>
+        <button class="modal-close-btn" onclick="Auth.closeModal('student-gateway-modal')" aria-label="إغلاق نافذة تسجيل الدخول">
+          <i class="fas fa-times" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <!-- Audio Guide Button for Gateway Form -->
+      <div style="background: var(--bg-surface-elevated); padding: 0.75rem 1rem; border-radius: 8px; display: flex; align-items: center; justify-content: space-between;">
+        <span><i class="fas fa-info-circle" style="color: var(--primary);"></i> هل تحتاج لمساعدة صوتية في ملء هذا النموذج؟</span>
+        <button class="access-btn" onclick="Auth.playInputGuide('student-gateway')" aria-label="الاستماع للإرشادات الصوتية لملء النموذج">
+          <i class="fas fa-volume-up"></i> إرشادات صوتية
+        </button>
+      </div>
+
+      <div id="student-login-error" class="simple-mode-box" style="display: none; border-color: var(--error); color: var(--error); background: var(--error-bg);"></div>
+
+      <form id="student-login-form" onsubmit="Auth.handleStudentLogin(event)">
+        <!-- 1. Full Name -->
+        <div class="form-group">
+          <label for="student-fullname" class="form-label">
+            <span>الاسم بالكامل (ثلاثي أو رباعي): *</span>
+          </label>
+          <input type="text" id="student-fullname" class="form-control" placeholder="أدخل اسمك بالكامل كما تود ظهوره في الشهادة" required autocomplete="name">
+        </div>
+
+        <!-- 2. Gmail / Email -->
+        <div class="form-group">
+          <label for="student-email" class="form-label">
+            <span>البريد الإلكتروني (Gmail): *</span>
+          </label>
+          <input type="email" id="student-email" class="form-control" placeholder="example@gmail.com" required autocomplete="email">
+        </div>
+
+        <!-- 3. Unified Student Access Password (Strictly silent validation) -->
+        <div class="form-group">
+          <label for="student-password" class="form-label">
+            <span>كلمة المرور المشتركة للطلاب: *</span>
+            <button type="button" class="access-btn" style="padding: 0.15rem 0.5rem; font-size: 0.8rem;" onclick="Auth.playInputGuide('student-password')" aria-label="إرشادات حقل كلمة المرور">
+              <i class="fas fa-volume-up"></i>
+            </button>
+          </label>
+          <div class="input-with-button">
+            <input type="password" id="student-password" class="form-control" placeholder="أدخل كلمة المرور المشتركة الممنوحة للطلاب" required autocomplete="current-password">
+            <button type="button" id="toggle-student-pw-btn" class="toggle-field-btn" onclick="Auth.togglePasswordVisibility('student-password', 'toggle-student-pw-btn')" aria-label="إظهار أو إخفاء كلمة المرور">
+              <i class="fas fa-eye" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- 4. Optional 14-digit National ID -->
+        <div class="form-group">
+          <label for="student-nid" class="form-label">
+            <span>الرقم القومي (14 رقماً - اختياري عند التسجيل):</span>
+            <button type="button" class="access-btn" style="padding: 0.15rem 0.5rem; font-size: 0.8rem;" onclick="Auth.playInputGuide('national-id')" aria-label="إرشادات حقل الرقم القومي">
+              <i class="fas fa-volume-up"></i>
+            </button>
+          </label>
+          <input type="text" id="student-nid" class="form-control" maxlength="14" pattern="\d{14}" placeholder="مكون من 14 رقماً (اختياري لحفظ الخصوصية أو لإصدار الشهادة)">
+          <small style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.25rem;">
+            * للحفاظ على خصوصيتك: يمكنك ترك هذا الحقل فارغاً الآن وتحديده فقط عند إصدار الشهادة الرسمية المعتمدة.
+          </small>
+        </div>
+
+        <button type="submit" class="btn-primary" style="width: 100%; padding: 0.85rem; font-size: 1.1rem; margin-top: 1rem;">
+          <i class="fas fa-sign-in-alt" aria-hidden="true"></i> تسجيل الدخول والبدء في التعلم
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. Admin Login Modal (المهندس محمد عاطف) -->
+  <div id="admin-login-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-admin-title">
+    <div class="modal-box" style="max-width: 520px;">
+      <div class="modal-header">
+        <h3 id="modal-admin-title" style="font-size: 1.4rem; font-weight: 800; color: #1e293b;">
+          <i class="fas fa-user-shield"></i> بوابة دخول المشرف العام
+        </h3>
+        <button class="modal-close-btn" onclick="Auth.closeModal('admin-login-modal')" aria-label="إغلاق نافذة المشرف">
+          <i class="fas fa-times" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <p style="color: var(--text-muted); font-size: 0.95rem;">
+        هذه البوابة مخصصة حصرياً للمشرف العام على المنصة <strong>المهندس محمد عاطف</strong> لإدارة المنصة والمحتوى.
+      </p>
+
+      <div id="admin-login-error" class="simple-mode-box" style="display: none; border-color: var(--error); color: var(--error); background: var(--error-bg);"></div>
+
+      <form onsubmit="Auth.handleAdminLogin(event)">
+        <div class="form-group">
+          <label for="admin-email" class="form-label">البريد الإلكتروني الإداري:</label>
+          <input type="email" id="admin-email" class="form-control" placeholder="matf37920@gmail.com" required autocomplete="username">
+        </div>
+
+        <div class="form-group">
+          <label for="admin-password" class="form-label">كلمة المرور الإدارية:</label>
+          <div class="input-with-button">
+            <input type="password" id="admin-password" class="form-control" placeholder="أدخل كلمة المرور الإدارية الخاصة" required autocomplete="current-password">
+            <button type="button" id="toggle-admin-pw-btn" class="toggle-field-btn" onclick="Auth.togglePasswordVisibility('admin-password', 'toggle-admin-pw-btn')" aria-label="إظهار أو إخفاء كلمة المرور الإدارية">
+              <i class="fas fa-eye" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary" style="width: 100%; padding: 0.85rem; font-size: 1.05rem; margin-top: 1rem;">
+          <i class="fas fa-shield-alt" aria-hidden="true"></i> التحقق ودخول لوحة الإدارة
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 3. Chapter Viewer Modal (With Simple Mode & Audio) -->
+  <div id="chapter-viewer-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="chapter-modal-title">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="chapter-modal-title" style="font-size: 1.4rem; font-weight: 800; color: var(--primary);">
+          عنوان الوحدة التعليمية
+        </h3>
+        <button class="modal-close-btn" onclick="Auth.closeModal('chapter-viewer-modal'); Accessibility.stopSpeech();" aria-label="إغلاق قارئ الوحدة">
+          <i class="fas fa-times" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <div id="chapter-modal-content">
+        <!-- Rendered dynamically by App.openChapterModal() -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Keyboard Shortcuts Modal (Alt + H) -->
+  <div id="shortcuts-help-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-shortcuts-title">
+    <div class="modal-box" style="max-width: 620px;">
+      <div class="modal-header">
+        <h3 id="modal-shortcuts-title" style="font-size: 1.4rem; font-weight: 800; color: var(--primary);">
+          <i class="fas fa-keyboard"></i> دليل اختصارات لوحة المفاتيح الميسرة
+        </h3>
+        <button class="modal-close-btn" onclick="Auth.closeModal('shortcuts-help-modal')" aria-label="إغلاق دليل الاختصارات">
+          <i class="fas fa-times" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <p style="color: var(--text-muted); margin-bottom: 1rem;">
+        يمكن للطلاب المكفوفين ومستخدمي قارئات الشاشة التنقل السريع بين أقسام المنصة عبر الضغط على مفتاح <strong>Alt</strong> مع الأرقام أو الحروف التالية:
+      </p>
+
+      <table style="width: 100%; border-collapse: collapse; text-align: right;">
+        <tbody>
+          <tr style="border-bottom: 1px solid var(--border-color);"><td style="padding: 0.5rem; font-weight: bold;">Alt + 1</td><td style="padding: 0.5rem;">الانتقال إلى الصفحة الرئيسية</td></tr>
+          <tr style="border-bottom: 1px solid var(--border-color);"><td style="padding: 0.5rem; font-weight: bold;">Alt + 2</td><td style="padding: 0.5rem;">الانتقال إلى فصول الذكاء الاصطناعي (9 وحدات)</td></tr>
+          <tr style="border-bottom: 1px solid var(--border-color);"><td style="padding: 0.5rem; font-weight: bold;">Alt + 3</td><td style="padding: 0.5rem;">الانتقال إلى تكنولوجيا التعليم والتحول الرقمي</td></tr>
+          <tr style="border-bottom: 1px solid var(--border-color);"><td style="padding: 0.5rem; font-weight: bold;">Alt + 4</td><td style="padding: 0.5rem;">الانتقال إلى مكتبة أدوات الذكاء الاصطناعي</td></tr>
+          <tr style="border-bottom: 1px solid var(--border-color);"><td style="padding: 0.5rem; font-weight: bold;">Alt + 5</td><td style="padding: 0.5rem;">الانتقال إلى الاختبارات والتقييم الفوري</td></tr>
+          <tr style="border-bottom: 1px solid var(--border-color);"><td style="padding: 0.5rem; font-weight: bold;">Alt + 6</td><td style="padding: 0.5rem;">الانتقال إلى لوحة تحكم الطالب والشهادات</td></tr>
+          <tr style="border-bottom: 1px solid var(--border-color);"><td style="padding: 0.5rem; font-weight: bold;">Alt + 7</td><td style="padding: 0.5rem;">الانتقال إلى غرف النقاش ومجتمع بصيرة</td></tr>
+          <tr style="border-bottom: 1px solid var(--border-color);"><td style="padding: 0.5rem; font-weight: bold;">Alt + 8</td><td style="padding: 0.5rem;">الانتقال إلى مركز إمكانية الوصول والأدوات المتخصصة</td></tr>
+          <tr style="border-bottom: 1px solid var(--border-color);"><td style="padding: 0.5rem; font-weight: bold;">Alt + 9</td><td style="padding: 0.5rem;">الانتقال إلى لوحة إدارة المشرف العام</td></tr>
+          <tr style="border-bottom: 1px solid var(--border-color);"><td style="padding: 0.5rem; font-weight: bold;">Alt + 0</td><td style="padding: 0.5rem;">الانتقال إلى صفحة اتصل بنا والدعم المباشر</td></tr>
+          <tr style="border-bottom: 1px solid var(--border-color);"><td style="padding: 0.5rem; font-weight: bold;">Alt + R</td><td style="padding: 0.5rem;">تشغيل أو إيقاف مسطرة القراءة البصرية</td></tr>
+          <tr style="border-bottom: 1px solid var(--border-color);"><td style="padding: 0.5rem; font-weight: bold;">Alt + S</td><td style="padding: 0.5rem;">بدء قراءة القسم النشط صوتياً / إيقاف الصوت</td></tr>
+          <tr style="border-bottom: 1px solid var(--border-color);"><td style="padding: 0.5rem; font-weight: bold;">Alt + M</td><td style="padding: 0.5rem;">تشغيل الأوامر الصوتية والتحكم الصوتي بالمايك</td></tr>
+          <tr><td style="padding: 0.5rem; font-weight: bold;">Alt + H</td><td style="padding: 0.5rem;">فتح نافذة دليل الاختصارات هذه</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Floating Accessible Arabic AI Chatbot Assistant "بصيرة" -->
+  <button id="floating-chatbot-btn" class="floating-bot-btn" title="المساعد الذكي بصيرة" aria-label="فتح المساعد الذكي الصوتي التفاعلي بصيرة">
+    <i class="fas fa-robot" aria-hidden="true"></i>
+  </button>
+
+  <div id="chatbot-window" class="bot-window" role="dialog" aria-modal="true" aria-labelledby="chatbot-win-title">
+    <div class="bot-header">
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <i class="fas fa-robot"></i>
+        <h4 id="chatbot-win-title" style="font-weight: 800; font-size: 1.05rem;">المساعد الذكي بصيرة</h4>
+      </div>
+      <button id="close-chatbot-btn" class="access-btn" style="padding: 0.2rem 0.5rem; background: transparent; color: inherit; border: none;" aria-label="إغلاق المساعد الذكي">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <div id="chatbot-messages" class="bot-messages" role="log" aria-live="polite">
+      <div class="bot-bubble incoming">
+        <p>مرحباً بك! أنا مساعدك الذكي "بصيرة". كيف يمكنني مساعدتك اليوم في دراسة مفاهيم الذكاء الاصطناعي، أو استخراج شهادتك، أو التواصل مع المهندس محمد عاطف؟</p>
+      </div>
+    </div>
+
+    <!-- Quick query pills -->
+    <div style="padding: 0.4rem 0.75rem; display: flex; gap: 0.35rem; overflow-x: auto; background: var(--bg-surface-elevated); border-top: 1px solid var(--border-color);">
+      <button class="access-btn" style="font-size: 0.75rem; white-space: nowrap; padding: 0.2rem 0.4rem;" onclick="App.sendChatMessage('من هو المشرف العام على المنصة؟')">
+        المشرف العام؟
+      </button>
+      <button class="access-btn" style="font-size: 0.75rem; white-space: nowrap; padding: 0.2rem 0.4rem;" onclick="App.sendChatMessage('كيف أحصل على شهادة معتمدة؟')">
+        كيف أصدر شهادتي؟
+      </button>
+      <button class="access-btn" style="font-size: 0.75rem; white-space: nowrap; padding: 0.2rem 0.4rem;" onclick="App.sendChatMessage('ما هي اختصارات لوحة المفاتيح؟')">
+        الاختصارات؟
+      </button>
+    </div>
+
+    <form id="chatbot-form" class="bot-input-area">
+      <input type="text" id="chat-input-field" class="form-control" placeholder="اطرح سؤالك هنا..." required style="padding: 0.5rem 0.75rem; font-size: 0.95rem;">
+      <button type="submit" class="btn-primary" style="padding: 0.5rem 1rem;" aria-label="إرسال السؤال">
+        <i class="fas fa-paper-plane" aria-hidden="true"></i>
+      </button>
+    </form>
+  </div>
+
+  <!-- Platform Footer -->
+  <footer class="main-footer" role="contentinfo">
+    <div class="footer-content">
+      <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 1.25rem; font-weight: 800; color: var(--primary);">
+        <i class="fas fa-brain"></i>
+        <span>منصة بصيرة التعليمية للذكاء الاصطناعي وتكنولوجيا التعليم</span>
+      </div>
+      <p style="color: var(--text-muted); font-size: 0.95rem; max-width: 800px;">
+        بيئة تعليمية شاملة مخصصة لتمكين الطلاب المكفوفين وضعاف البصر وذوي الاحتياجات الخاصة، ومتاحة لجميع الراغبين في دراسة علوم الذكاء الاصطناعي وفق أعلى معايير الجودة والشمولية العالمية.
+      </p>
+      <div style="background: var(--bg-surface-elevated); padding: 0.75rem 1.5rem; border-radius: 8px; border: 1px solid var(--border-color); font-weight: 700;">
+        المشرف العام ومؤسس المنصة: <strong style="color: var(--primary);">المهندس محمد عاطف</strong> | البريد: <a href="mailto:matf37920@gmail.com" style="color: inherit;">matf37920@gmail.com</a> | الهاتف: <a href="tel:01142837070" style="color: inherit;">01142837070</a>
+      </div>
+      <small style="color: var(--text-muted);">
+        جميع الحقوق محفوظة &copy; 2026 - منصة بصيرة للذكاء الاصطناعي | متوافقة مع معايير WCAG AAA و UDL العالمية.
+      </small>
+    </div>
+  </footer>
+
+  <!-- Application Scripts -->
+  <script src="/js/data.js"></script>
+  <script src="/js/accessibility.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
