@@ -1124,3 +1124,37 @@ a {
 a:hover {
   text-decoration: none !important;
 }
+
+
+/* ===== ظبط شكل الموبايل زي الكمبيوتر ===== */
+@media (max-width: 768px) {
+  header, nav, .header, .navbar, .top-bar {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 8px !important;
+    text-align: center !important;
+  }
+  nav a, header a {
+    font-size: 13px !important;
+    padding: 6px 8px !important;
+    white-space: nowrap !important;
+  }
+  .accessibility-bar, .toolbar, .controls {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 6px !important;
+  }
+  .hero, .main-hero, section:first-of-type {
+    text-align: center !important;
+    padding: 20px 12px !important;
+  }
+  h1 {
+    font-size: 22px !important;
+    line-height: 1.5 !important;
+  }
+}
