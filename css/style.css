@@ -1114,3 +1114,13 @@ body.theme-high-contrast .supervisor-notice-banner {
     border: 8px double #000;
   }
 }
+
+
+/* ===== إصلاح الروابط والشكل على الموبايل ===== */
+a {
+  text-decoration: none !important;
+  color: inherit;
+}
+a:hover {
+  text-decoration: none !important;
+}
